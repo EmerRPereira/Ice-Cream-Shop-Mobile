@@ -1,0 +1,81 @@
+package com.iceshop.data
+
+import com.iceshop.model.Product
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
+/**
+ * Repositório para operações com produtos no banco de dados
+ */
+class ProductRepository {
+
+    /**
+     * Busca todos os produtos disponíveis
+     */
+    suspend fun getAllProducts(): List<Product> = withContext(Dispatchers.IO) {
+        val products = mutableListOf<Product>()
+        val connection = DatabaseClient.getConnection()
+
+        try {
+            val statement = connection?.prepareStatement(
+                """
+                SELECT product_id, name, description, price, is_available 
+                FROM products 
+                WHERE is_available = true 
+                ORDER BY name
+                """
+            )
+            val resultSet = statement?.executeQuery()
+
+            while (resultSet?.next() == true) {
+                products.add(
+                    Product(
+                        productId = resultSet.getInt("product_id"),
+                        name = resultSet.getString("name"),
+                        description = resultSet.getString("description"),
+                        price = resultSet.getDouble("price"),
+                        isAvailable = resultSet.getBoolean("is_available")
+                    )
+                )
+            }
+            println("✅ Produtos carregados: ${products.size}")
+        } catch (e: Exception) {
+            println("❌ Erro ao carregar produtos: ${e.message}")
+            e.printStackTrace()
+        } finally {
+            DatabaseClient.closeConnection()
+        }
+        products
+    }
+
+    /**
+     * Busca um produto pelo ID
+     */
+    suspend fun getProductById(productId: Int): Product? = withContext(Dispatchers.IO) {
+        var product: Product? = null
+        val connection = DatabaseClient.getConnection()
+
+        try {
+            val statement = connection?.prepareStatement(
+                "SELECT product_id, name, description, price, is_available FROM products WHERE product_id = ?"
+            )
+            statement?.setInt(1, productId)
+            val resultSet = statement?.executeQuery()
+
+            if (resultSet?.next() == true) {
+                product = Product(
+                    productId = resultSet.getInt("product_id"),
+                    name = resultSet.getString("name"),
+                    description = resultSet.getString("description"),
+                    price = resultSet.getDouble("price"),
+                    isAvailable = resultSet.getBoolean("is_available")
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            DatabaseClient.closeConnection()
+        }
+        product
+    }
+}
