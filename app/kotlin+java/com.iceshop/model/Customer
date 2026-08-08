@@ -1,0 +1,13 @@
+package com.iceshop.model
+
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class Customer(
+    val customerId: Int = 0,
+    val name: String,
+    val phone: String? = null,
+    val email: String? = null,
+    val address: String? = null
+) : Parcelable
