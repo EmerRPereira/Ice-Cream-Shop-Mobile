@@ -343,14 +343,14 @@ SELECT * FROM customers ORDER BY customer_id DESC;
 
 ### Common Issues
 
-| Issue | Solution |
-|-------|----------|
-| **Connection refused** | Check PostgreSQL is running; verify DB_HOST setting |
-| **NetworkOnMainThreadException** | All DB operations use Coroutines with Dispatchers.IO |
-| **ClassNotFoundException (JDBC)** | Verify PostgreSQL JDBC driver dependency in build.gradle.kts |
-| **Permission denied** | Add `<uses-permission android:name="android.permission.INTERNET" />` to AndroidManifest.xml |
-| **Emulator can't connect** | Use `10.0.2.2` as DB_HOST for Android emulator |
-| **Physical device can't connect** | Use your computer's actual IP address; check firewall settings |
+|         Issue                      |                  Solution                            |
+|------------------------------------|------------------------------------------------------|
+| **Connection refused**             | Check PostgreSQL is running; verify DB_HOST setting  |
+| **NetworkOnMainThreadException**   | All DB operations use Coroutines with Dispatchers.IO |
+| **ClassNotFoundException (JDBC)**  | Verify PostgreSQL JDBC driver dependency in build.gradle.kts |
+| **Permission denied**              | Add `<uses-permission android:name="android.permission.INTERNET" />` to AndroidManifest.xml |
+| **Emulator can't connect**         | Use `10.0.2.2` as DB_HOST for Android emulator |
+| **Physical device can't connect**  | Use your computer's actual IP address; check firewall settings |
 
 ---
 
